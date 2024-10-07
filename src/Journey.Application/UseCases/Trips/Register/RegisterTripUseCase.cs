@@ -1,4 +1,6 @@
 ﻿using Journey.Communication.Requests;
+using Journey.Exception;
+using Journey.Exception.ExceptionsBase;
 
 namespace Journey.Application.UseCases.Trips.Register;
 
@@ -6,21 +8,20 @@ public class RegisterTripUseCase
 {
     public void Execute(RequestRegisterTripJson request)
     {
-        
+        Validate(request);
     }
     
     //AUXILIAR
     private void Validate(RequestRegisterTripJson request)
     {
         if (string.IsNullOrEmpty(request.Name))
-            throw new ArgumentException("Nome não pode ser vazio.");
+            throw new JourneyException(ResourceErrorMessages.NAME_EMPTY);
         
-        if(request.StartDate < DateTime.UtcNow)
-            throw new ArgumentException("A viagem não pode ser " +
-                                        "registrada para uma data passada.");
+        if(request.StartDate.Date < DateTime.UtcNow.Date)
+            throw new JourneyException(ResourceErrorMessages.DATE_TRIP_MUST_BE_LATER_THAN_TODAY);
 
-        if (request.EndDate >= request.StartDate)
-            throw new ArgumentException("A viagem deve terminar apos a data de inicio.");
+        if (request.EndDate.Date < request.StartDate.Date)
+            throw new JourneyException(ResourceErrorMessages.END_DATE_TRIP_MUST_BE_LATER_START_DATE);
     }
     
 }
