@@ -20,9 +20,13 @@ public class TripsController : ControllerBase
 
             return Created();
         }
-        catch(JourneyException ex)
+        catch (JourneyException ex)
         {
             return BadRequest(ex.Message);
+        }
+        catch
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, "Erro desconhecido");
         }
     }
 }
