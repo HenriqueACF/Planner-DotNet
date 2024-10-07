@@ -16,9 +16,9 @@ public class TripsController : ControllerBase
         {
             var useCase = new RegisterTripUseCase();
 
-            useCase.Execute(request);
+            var response = useCase.Execute(request);
 
-            return Created();
+            return Created(string.Empty, response);
         }
         catch (JourneyException ex)
         {
