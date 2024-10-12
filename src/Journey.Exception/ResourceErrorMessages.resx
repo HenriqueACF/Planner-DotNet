@@ -30,4 +30,7 @@
     <data name="END_DATE" xml:space="preserve">
         <value>must enddate</value>
     </data>
+    <data name="TRIP_NOT_FOUND" xml:space="preserve">
+        <value>Trip Not Found</value>
+    </data>
 </root>
