@@ -10,13 +10,14 @@ public class ExceptionFilter : IExceptionFilter
     {
         if (context.Exception is JourneyException)
         {
-            context.HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
-            context.Result = new NotFoundObjectResult(context.Exception.Message);
+            var journeyException = (JourneyException)context.Exception;
+            context.HttpContext.Response.StatusCode = (int)journeyException.GetStatusCode();
+            context.Result = new ObjectResult(context.Exception.Message);
         }
-        else if (context.Exception is ErrorOnValidationException)
+        else
         {
-            context.HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
-            context.Result = new BadRequestObjectResult(context.Exception.Message);
+            context.HttpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
+            context.Result = new ObjectResult("Erro Desconhecido");
         }
     }
 }
