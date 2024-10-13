@@ -36,14 +36,14 @@ public class RegisterTripUseCase
     //AUXILIAR
     private void Validate(RequestRegisterTripJson request)
     {
-        if (string.IsNullOrEmpty(request.Name))
-            throw new ErrorOnValidationException(ResourceErrorMessages.NAME_EMPTY);
+        var validator = new RegisterTripValidator();
         
-        if(request.StartDate.Date < DateTime.UtcNow.Date)
-            throw new ErrorOnValidationException(ResourceErrorMessages.DATE_TRIP_MUST_BE_LATER_THAN_TODAY);
+        var result = validator.Validate(request);
 
-        if (request.EndDate.Date < request.StartDate.Date)
-            throw new ErrorOnValidationException(ResourceErrorMessages.END_DATE_TRIP_MUST_BE_LATER_START_DATE);
+        if (result.IsValid == false)
+        {
+            var errorMessages = result.Errors.Select(error => error.ErrorMessage).ToList();
+            throw new ErrorOnValidationException(errorMessages);
+        }
     }
-    
 }

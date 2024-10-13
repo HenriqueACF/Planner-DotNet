@@ -10,4 +10,5 @@ public abstract class JourneyException : System.Exception
     }
     //Obriga todas as classes que fazem herança a implementar essa função.
     public abstract HttpStatusCode GetStatusCode();
+    public abstract IList<string> GetErrorMessages();
 }
