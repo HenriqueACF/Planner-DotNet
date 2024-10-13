@@ -1,4 +1,5 @@
-﻿using Journey.Application.UseCases.Trips.GetAll;
+﻿using Journey.Application.UseCases.Trips.Delete;
+using Journey.Application.UseCases.Trips.GetAll;
 using Journey.Application.UseCases.Trips.GetById;
 using Journey.Application.UseCases.Trips.Register;
 using Journey.Communication.Requests;
@@ -11,6 +12,7 @@ namespace Journey.Api.Controllers;
 
 public class TripsController : ControllerBase
 {
+    //ENDPOINT DE REGISTRO
     [HttpPost]
     [ProducesResponseType(typeof(ResponseShortTripJson), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
@@ -23,6 +25,7 @@ public class TripsController : ControllerBase
         return Created(string.Empty, response);
     }
 
+    //ENDPOINT PARA BUSCAR TODAS AS TRIPS
     [HttpGet]
     [ProducesResponseType(typeof(ResponseTripsJson), 200)]
     public IActionResult GetAll()
@@ -34,6 +37,7 @@ public class TripsController : ControllerBase
         return Ok(result);
     }
 
+    //ENDPOINT PARA ENCONTRAR TRIP PELO ID
     [HttpGet]
     [Route("{id}")]
     [ProducesResponseType(typeof(ResponseTripJson), StatusCodes.Status200OK)]
@@ -45,5 +49,18 @@ public class TripsController : ControllerBase
         var response = useCase.Execute(id);
 
         return Ok(response);
+    }
+    //ENDPOINT DE DELETE
+    [HttpDelete]
+    [Route("{id}")]
+    [ProducesResponseType( StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+    public IActionResult Delete([FromRoute] Guid id)
+    {
+        var useCase = new DeleteTripByIdUseCase();
+
+        useCase.Execute(id);
+
+        return NoContent();
     }
 }
