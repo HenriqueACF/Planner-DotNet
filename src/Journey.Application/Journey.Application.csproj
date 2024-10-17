@@ -16,8 +16,4 @@
     <PackageReference Include="FluentValidation" Version="11.10.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="UseCases\Activities\Delete\" />
-  </ItemGroup>
-
 </Project>
