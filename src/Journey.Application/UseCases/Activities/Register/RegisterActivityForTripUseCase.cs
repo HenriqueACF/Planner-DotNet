@@ -6,6 +6,7 @@ using Journey.Infrastructure;
 using Journey.Infrastructure.Entities;
 using Microsoft.EntityFrameworkCore;
 using FluentValidation.Results;
+using ActivityStatus = Journey.Communication.Enums.ActivityStatus;
 
 namespace Journey.Application.UseCases.Activities.Register;
 
@@ -17,12 +18,30 @@ public class RegisterActivityForTripUseCase
 
         var trip = dbContext
             .Trips
-            .Include(trip => trip.Activities)
+            // .Include(trip => trip.Activities)
             .FirstOrDefault(trip => trip.Id == tripId);
         
         Validate(trip, request);
 
-        return null;
+        var entity = new Activity
+        {
+            Name = request.Name,
+            Date = request.Date,
+            TripId = tripId
+        };
+        
+        // trip!.Activities.Add(entity);
+
+        dbContext.Activities.Add(entity);
+        dbContext.SaveChanges();
+
+        return new ResponseActivityJson
+        {
+            Date = request.Date,
+            Id = entity.Id,
+            Name = entity.Name,
+            Status = (ActivityStatus)entity.Status
+        };
     }
 
     private void Validate(Trip? trip, RequestRegisterActivityJson request)
